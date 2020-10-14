@@ -88,10 +88,10 @@ void LoopClosing::Run()
                     t4 = std::chrono::steady_clock::now();
 
                     mvTimesCandidate.push_back(mTempTime[0]);
-                    time = std::chrono::duration_cast<std::chrono::duration<double> >(t3 - t2).count();
-                    mvTimesST.push_back(time);
                     mvTimesFusion.push_back(mTempTime[1]);
                     mvTimesEGOpt.push_back(mTempTime[2]);
+                    time = std::chrono::duration_cast<std::chrono::duration<double> >(t3 - t2).count();
+                    mvTimesST.push_back(time);
                     time = std::chrono::duration_cast<std::chrono::duration<double> >(t4 - t1).count();
                     mvTimesLCTotal.push_back(time);
                 }
@@ -260,7 +260,7 @@ bool LoopClosing::ComputeSim3()
 {
     // For each consistent loop candidate we try to compute a Sim3
 
-    const int nInitialCandidates = mvpEnoughConsistentCandidates.size();
+    const int nInitialCandidates = mvpEnoughConsistentCandidates.size(); // first candidates
 
     // We compute first ORB matches for each candidate
     // If enough matches are found, we setup a Sim3Solver
@@ -272,7 +272,7 @@ bool LoopClosing::ComputeSim3()
     vector<vector<MapPoint*> > vvpMapPointMatches;
     vvpMapPointMatches.resize(nInitialCandidates);
 
-    vector<bool> vbDiscarded;
+    vector<bool> vbDiscarded;   // candidates to be deleted
     vbDiscarded.resize(nInitialCandidates);
 
     int nCandidates=0; //candidates with enough matches
@@ -290,8 +290,10 @@ bool LoopClosing::ComputeSim3()
             continue;
         }
 
-        int nmatches = matcher.SearchByBoW(mpCurrentKF,pKF,vvpMapPointMatches[i]);
+        ///////////////////////////////////////////////////////////////////////////
+        int nmatches = matcher.SearchByBoW(mpCurrentKF,pKF,vvpMapPointMatches[i]); // matches between CurrentKF and candidateKF
 
+        // if there are few matches, the candidate is discarded.
         if(nmatches<20)
         {
             vbDiscarded[i] = true;

@@ -151,7 +151,8 @@ protected:
     std::thread* mpThreadGBA;
 
     // Fix scale in the stereo/RGB-D case
-    bool mbFixScale;
+    // false
+    bool mbFixScale; 
 
 
     bool mnFullBAIdx;

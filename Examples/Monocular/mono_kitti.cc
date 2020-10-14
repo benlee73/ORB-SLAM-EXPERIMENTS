@@ -100,8 +100,10 @@ int main(int argc, char **argv)
         else if(ni>0)
             T = tframe-vTimestamps[ni-1];
 
-        if(ttrack<T)
-            usleep((T-ttrack)*1e6);
+        // if(ttrack<T)
+        //     usleep((T-ttrack)*1e6);
+                
+        usleep((0.2-ttrack)*1e6); // 5fps
     }
 
     // Stop all threads

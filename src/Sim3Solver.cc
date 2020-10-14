@@ -42,7 +42,7 @@ Sim3Solver::Sim3Solver(KeyFrame *pKF1, KeyFrame *pKF2, const vector<MapPoint *> 
 
     vector<MapPoint*> vpKeyFrameMP1 = pKF1->GetMapPointMatches();
 
-    mN1 = vpMatched12.size();
+    mN1 = vpMatched12.size(); // number of matches between two keyframes
 
     mvpMapPoints1.reserve(mN1);
     mvpMapPoints2.reserve(mN1);
