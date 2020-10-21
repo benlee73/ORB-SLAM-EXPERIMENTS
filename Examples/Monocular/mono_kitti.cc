@@ -64,6 +64,7 @@ int main(int argc, char **argv)
     cv::Mat im;
     for(int ni=0; ni<nImages; ni++)
     {
+        cout << "\n[" << ni+1 << "]" << flush;
         // Read image from file
         im = cv::imread(vstrImageFilenames[ni],CV_LOAD_IMAGE_UNCHANGED);
         double tframe = vTimestamps[ni];
@@ -102,8 +103,9 @@ int main(int argc, char **argv)
 
         // if(ttrack<T)
         //     usleep((T-ttrack)*1e6);
-                
-        usleep((0.2-ttrack)*1e6); // 5fps
+
+        if(0.2 > ttrack)
+            usleep((0.2-ttrack)*1e6); // 5fps
     }
 
     // Stop all threads

@@ -901,11 +901,15 @@ bool Tracking::TrackWithMotionModel()
         th=7;
     int nmatches = matcher.SearchByProjection(mCurrentFrame,mLastFrame,th,mSensor==System::MONOCULAR);
 
+    mvMatchRatio.push_back(nMatches*1000/mCurrentFrame.N);
+
     // If few matches, uses a wider window search
     if(nmatches<20)
     {
         fill(mCurrentFrame.mvpMapPoints.begin(),mCurrentFrame.mvpMapPoints.end(),static_cast<MapPoint*>(NULL));
         nmatches = matcher.SearchByProjection(mCurrentFrame,mLastFrame,2*th,mSensor==System::MONOCULAR);
+        mvMatchRatio.pop_back();
+        mvMatchRatio.push_back(nMatches*1000/mCurrentFrame.N);
     }
 
     if(nmatches<20)
@@ -1001,6 +1005,7 @@ bool Tracking::NeedNewKeyFrame()
         return false;
 
     const int nKFs = mpMap->KeyFramesInMap();
+    cout << "nKFs(" << nKFs << ")-" << flush;
 
     // Do not insert keyframes if not enough frames have passed from last relocalisation
     if(mCurrentFrame.mnId<mnLastRelocFrameId+mMaxFrames && nKFs>mMaxFrames)
@@ -1641,6 +1646,16 @@ void Tracking::PrintTable1Value(vector<float> &times)
     float std = sqrt(var/len);
 
     printf("%7.2f%7.2f%7.2f\n", (median*1000), (mean*1000), (std*1000));
+}
+
+void Tracking::PrintMatchRatio()
+{
+    float sum(0);
+    float n = mvMatchRatio.size();
+
+    for(float i=0; i<n; i++)
+        sum += mvMatchRatio[i];
+    cout << "mean match ratio: " << (sum/n)/10 << "%" << endl;
 }
 
 } //namespace ORB_SLAM

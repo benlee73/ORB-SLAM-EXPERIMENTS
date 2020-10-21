@@ -65,6 +65,14 @@ void KeyFrame::ComputeBoW()
         // We assume the vocabulary tree has 6 levels, change the 4 otherwise
         mpORBvocabulary->transform(vCurrentDesc,mBowVec,mFeatVec,4);
     }
+
+    // cout << "N(" << this->N << ")-" << flush;
+    // map<unsigned int, vector<unsigned int>>::iterator it;
+    // for(it=mFeatVec.begin(); it!=mFeatVec.end(); it++)
+    // {
+    //     cout << "\nNID:" << it->first << "(" << it->second.size() << ")" << flush;
+    // }
+
 }
 
 void KeyFrame::SetPose(const cv::Mat &Tcw_)

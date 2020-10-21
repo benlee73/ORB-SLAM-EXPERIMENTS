@@ -1419,6 +1419,16 @@ bool TemplatedVocabulary<TDescriptor,F>::loadFromTextFile(const std::string &fil
         }
     }
 
+    for(int i=0; i<m_nodes[0].children.size(); i++)
+    {
+      int idx = m_nodes[0].children[i];
+      for(int j=0; j<m_nodes[idx].children.size(); j++)
+      {
+        int idx2 = m_nodes[idx].children[j];
+        cout << endl << idx2 << ":" << m_nodes[idx2].weight << flush;
+      }
+    }
+
     return true;
 
 }
